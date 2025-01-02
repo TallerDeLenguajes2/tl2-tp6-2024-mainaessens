@@ -18,6 +18,22 @@ build_property.GenerateRazorMetadataSourceChecksumAttributes =
 build_property.MSBuildProjectDirectory = c:\Users\naess\Documents\1. FACET\3° año\Segundo cuatrimestre\Taller de lenguaje II\tl2-tp6-2024-mainaessens
 build_property._RazorSourceGeneratorDebug = 
 
+[c:/Users/naess/Documents/1. FACET/3° año/Segundo cuatrimestre/Taller de lenguaje II/tl2-tp6-2024-mainaessens/Views/Clientes/CrearCliente.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2xpZW50ZXNcQ3JlYXJDbGllbnRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[c:/Users/naess/Documents/1. FACET/3° año/Segundo cuatrimestre/Taller de lenguaje II/tl2-tp6-2024-mainaessens/Views/Clientes/EliminarCliente.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2xpZW50ZXNcRWxpbWluYXJDbGllbnRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[c:/Users/naess/Documents/1. FACET/3° año/Segundo cuatrimestre/Taller de lenguaje II/tl2-tp6-2024-mainaessens/Views/Clientes/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2xpZW50ZXNcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[c:/Users/naess/Documents/1. FACET/3° año/Segundo cuatrimestre/Taller de lenguaje II/tl2-tp6-2024-mainaessens/Views/Clientes/ModificarCliente.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2xpZW50ZXNcTW9kaWZpY2FyQ2xpZW50ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [c:/Users/naess/Documents/1. FACET/3° año/Segundo cuatrimestre/Taller de lenguaje II/tl2-tp6-2024-mainaessens/Views/Presupuestos/CrearPresupuesto.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHJlc3VwdWVzdG9zXENyZWFyUHJlc3VwdWVzdG8uY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
