@@ -1,4 +1,4 @@
-@model Presupuestos
+@model Presupuesto
 
 <h2>Eliminar Presupuesto</h2>
 
@@ -12,8 +12,8 @@
         <td>@Model.IdPresupuesto</td>
     </tr>
     <tr>
-        <th>Descripción</th>
-        <td>@Model.NombreDestinatario</td>
+        <th>ID Cliente</th>
+        <td>@Model.Cliente.Id</td>
     </tr>
     <tr>
         <th>Precio</th>
@@ -22,6 +22,7 @@
 </table>
 
 <form asp-controller="Presupuestos" asp-action="EliminarPresupuestoConfirmado" method="post">
+    @Html.AntiForgeryToken()
     <input type="hidden" name="id" value="@Model.IdPresupuesto" />
     <button type="submit" class="btn btn-danger">Confirmar Eliminación</button>
     <a asp-action="Index" class="btn btn-secondary">Cancelar</a>

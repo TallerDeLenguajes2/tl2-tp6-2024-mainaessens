@@ -1,6 +1,6 @@
-@model Productos
+@model Producto
 
-<h2 class="text-danger">Eliminar Producto</h2>
+<h2>Eliminar Producto</h2>
 
 <div class="alert alert-danger">
     ¿Está seguro que desea eliminar el siguiente producto?
@@ -22,7 +22,8 @@
 </table>
 
 <form asp-controller="Productos" asp-action="EliminarProductoConfirmado" method="post">
+    @Html.AntiForgeryToken()
     <input type="hidden" name="id" value="@Model.IdProducto" />
     <button type="submit" class="btn btn-danger">Confirmar Eliminación</button>
-    <a asp-action="ListarProductos" class="btn btn-secondary">Cancelar</a>
+    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
 </form>

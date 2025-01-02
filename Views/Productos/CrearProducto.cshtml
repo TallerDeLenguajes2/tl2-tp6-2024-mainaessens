@@ -1,22 +1,23 @@
-@model Productos
+@model Producto
 
-<h2 class="text-danger">Crear Nuevo Producto</h2>
+<h2>Crear Nuevo Producto</h2>
 
 <form asp-action="CrearProducto" method="post">
+    @Html.AntiForgeryToken()
     <div class="form-group">
-        <label asp-for="IdProducto">ID del Producto</label>
-        <input asp-for="IdProducto" class="form-control" required />
-    </div>
-    <div class="form-group">
-        <label asp-for="Descripcion">Descripción</label>
-        <input asp-for="Descripcion" class="form-control" required />
+        <label asp-for="Descripcion">Descripción</label> <!--Los helpers como asp-for generarán automáticamente los atributos de validación necesarios para el front-end. -->
+        <input asp-for="Descripcion" class="form-control"/>
+        <span asp-validation-for="Descripcion" class="text-danger"></span>
     </div>
     <div class="form-group">
         <label asp-for="Precio">Precio</label>
-        <input asp-for="Precio" class="form-control" type="number" required />
+        <input asp-for="Precio" class="form-control" type="number"/>
+        <span asp-validation-for="Precio" class="text-danger"></span>
     </div>
     <div class="mt-3">
         <button type="submit" class="btn btn-primary">Crear Producto</button>
         <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
     </div>
 </form>
+
+@section Scripts{<partial name="_ValidationScriptsPartial"/>}
