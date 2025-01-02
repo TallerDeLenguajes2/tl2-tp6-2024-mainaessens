@@ -6,7 +6,8 @@
     <a asp-controller="Presupuestos" asp-action="CrearPresupuesto" class="btn btn-primary mb-3">
         <i class="fas fa-plus"></i> Crear Nuevo Presupuesto
     </a>
-     @if (!Model.Any())
+
+    @if (!Model.Any())
     {
         <div class="alert alert-info">
             No hay presupuestos registrados en el sistema.
@@ -19,7 +20,7 @@
                 <thead class="table-dark">
                     <tr>
                         <th scope="col">ID</th>
-                        <th scope="col">Destinatario</th>
+                        <th scope="col">Nombre Cliente</th>
                         <th scope="col">Fecha</th>
                         <th scope="col">Acciones</th>
                     </tr>
@@ -29,8 +30,8 @@
                     {
                         <tr>
                             <td>@presupuesto.IdPresupuesto</td>
-                            <td>@(string.IsNullOrEmpty(presupuesto.NombreDestinatario) ? "-" : presupuesto.NombreDestinatario)</td>
-                            <td>@presupuesto.FechaCreacion</td>
+                            <td>@presupuesto.Cliente.Nombre</td>
+                            <td>@presupuesto.FechaCreacion.ToShortDateString()</td>
                             <td>
                                 <div class="btn-group" role="group">
                                     <a asp-controller="Presupuestos" asp-action="ListarDetalles" 
