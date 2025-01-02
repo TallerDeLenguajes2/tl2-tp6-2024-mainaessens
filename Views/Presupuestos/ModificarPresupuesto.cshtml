@@ -1,0 +1,41 @@
+@model Presupuesto
+
+<h2>Modificar Presupuesto</h2>
+
+<form asp-action="ModificarPresupuesto" method="post">
+    <input type="hidden" asp-for="IdPresupuesto" />
+    <div class="form-group mb-2">
+        <label asp-for="IdPresupuesto">Id Presupuesto</label>
+        <input asp-for="IdPresupuesto" class="form-control" disabled />
+    </div>
+    <div class="form-group mb-2">
+        <label asp-for="NombreDestinatario">Nombre Destinatario</label>
+        <input asp-for="NombreDestinatario" class="form-control" type="text" required />
+    </div>
+    <div class="form-group mb-2">
+        <label asp-for="FechaCreacion">Fecha de Creación</label>
+        <input asp-for="FechaCreacion" class="form-control" type="date" disabled />
+    </div>
+    <h3 class = "mt-3 mb-3">Detalles del Presupuesto</h3>
+    <div id="detallesPresupuesto">
+    @for (int i = 0; i < Model.Detalle.Count; i++)
+    {
+        <div class="product-card">
+            <h5 class="product-title mt-2 mb-2">Producto: @Model.Detalle[i].Producto.Descripcion</h5>
+            <div class="form-group">
+                <label asp-for="Detalle[i].Cantidad">Cantidad</label>
+                <input asp-for="Detalle[i].Cantidad" class="form-control" type="number" required />
+            </div>
+            <div class="form-group">
+                <label asp-for="Detalle[i].Producto.Precio">Precio</label>
+                <input asp-for="Detalle[i].Producto.Precio" class="form-control" type="text" disabled />
+            </div>
+            <input type="hidden" asp-for="Detalle[i].Producto.IdProducto"/> <!--Este es un comentario, esto es importante, porque mande el id de cada producto en cada vuelta -->
+        </div>
+    }
+</div>
+    <div class="mt-3">
+        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+        <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+    </div>
+</form>

@@ -18,12 +18,24 @@ build_property.GenerateRazorMetadataSourceChecksumAttributes =
 build_property.MSBuildProjectDirectory = c:\Users\naess\Documents\1. FACET\3° año\Segundo cuatrimestre\Taller de lenguaje II\tl2-tp6-2024-mainaessens
 build_property._RazorSourceGeneratorDebug = 
 
-[c:/Users/naess/Documents/1. FACET/3° año/Segundo cuatrimestre/Taller de lenguaje II/tl2-tp6-2024-mainaessens/Views/Home/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
+[c:/Users/naess/Documents/1. FACET/3° año/Segundo cuatrimestre/Taller de lenguaje II/tl2-tp6-2024-mainaessens/Views/Presupuestos/CrearPresupuesto.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHJlc3VwdWVzdG9zXENyZWFyUHJlc3VwdWVzdG8uY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[c:/Users/naess/Documents/1. FACET/3° año/Segundo cuatrimestre/Taller de lenguaje II/tl2-tp6-2024-mainaessens/Views/Home/Privacy.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
+[c:/Users/naess/Documents/1. FACET/3° año/Segundo cuatrimestre/Taller de lenguaje II/tl2-tp6-2024-mainaessens/Views/Presupuestos/EliminarPresupuesto.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHJlc3VwdWVzdG9zXEVsaW1pbmFyUHJlc3VwdWVzdG8uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[c:/Users/naess/Documents/1. FACET/3° año/Segundo cuatrimestre/Taller de lenguaje II/tl2-tp6-2024-mainaessens/Views/Presupuestos/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHJlc3VwdWVzdG9zXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[c:/Users/naess/Documents/1. FACET/3° año/Segundo cuatrimestre/Taller de lenguaje II/tl2-tp6-2024-mainaessens/Views/Presupuestos/ListarDetalles.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHJlc3VwdWVzdG9zXExpc3RhckRldGFsbGVzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[c:/Users/naess/Documents/1. FACET/3° año/Segundo cuatrimestre/Taller de lenguaje II/tl2-tp6-2024-mainaessens/Views/Presupuestos/ModificarPresupuesto.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHJlc3VwdWVzdG9zXE1vZGlmaWNhclByZXN1cHVlc3RvLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [c:/Users/naess/Documents/1. FACET/3° año/Segundo cuatrimestre/Taller de lenguaje II/tl2-tp6-2024-mainaessens/Views/Productos/CrearProducto.cshtml]
