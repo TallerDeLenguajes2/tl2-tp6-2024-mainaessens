@@ -37,8 +37,12 @@ public class PresupuestosController : Controller
     [HttpGet] // formulario de creacion
     public IActionResult CrearPresupuesto()
     {
-        var viewModel = new PresupuestoViewModel
-        return View();
+        var viewModel = new PresupuestoViewModel{
+            productos = _productoRepository.ListarProductos(); 
+            clientes = _clienteRepository.ObtenerClientes();
+
+        }; 
+        return View(viewModel);
     }
 
     [HttpPost] // guardado del cliente
