@@ -39,7 +39,7 @@ public class PresupuestosRepository
                     {
                         IdPresupuesto = Convert.ToInt32(reader["idPresupuesto"]),
                         NombreDestinatario = reader["nombreDestinatario"].ToString(),
-                        Detalle = ObtenerDetalles(Convert.ToInt32(reader["idPresupuesto"]))
+                        Detalle = ObtenerDetalle(Convert.ToInt32(reader["idPresupuesto"]))
                     };
                     listaPres.Add(pres);
                 }
@@ -67,30 +67,13 @@ public class PresupuestosRepository
                         {
                             IdPresupuesto = Convert.ToInt32(reader["idPresupuesto"]),
                             NombreDestinatario = reader["nombreDestinatario"].ToString(),
-                            Detalle = ObtenerDetalles(id)
+                            Detalle = ObtenerDetalle(id)
                         };
                     }
                 }
             }
         }
         return presupuesto;
-    }
-
-    // Método para agregar un producto a un presupuesto
-    public void AgregarProductoAPresupuesto(int idPresupuesto, Productos producto, int cantidad)
-    {
-        using (SqliteConnection connection = new SqliteConnection(cadenaConexion))
-        {
-            string query = "INSERT INTO PresupuestosDetalle (idPresupuesto, idProducto, Cantidad) VALUES (@idPresupuesto, @idProducto, @cantidad)";
-            connection.Open();
-            using (var command = new SqliteCommand(query, connection))
-            {
-                command.Parameters.AddWithValue("@idPresupuesto", idPresupuesto);
-                command.Parameters.AddWithValue("@idProducto", producto.IdProducto);
-                command.Parameters.AddWithValue("@cantidad", cantidad);
-                command.ExecuteNonQuery();
-            }
-        }
     }
 
     // Método para eliminar un presupuesto por ID
@@ -118,31 +101,42 @@ public class PresupuestosRepository
     }
 
     // Método auxiliar para obtener detalles de un presupuesto
-    private List<PresupuestoDetalle> ObtenerDetalles(int idPresupuesto)
+    public List<PresupuestoDetalle> ObtenerDetalle(int id)
     {
-        List<PresupuestoDetalle> detalles = new List<PresupuestoDetalle>();
+        string query = @"SELECT p.idProducto, p.Descripcion, p.Precio, pd.Cantidad 
+                         FROM Productos AS p
+                         INNER JOIN PresupuestosDetalle AS pd USING (idProducto)
+                         WHERE pd.idPresupuesto = @idquery";
+
+        List<PresupuestoDetalle> lista = new List<PresupuestoDetalle>();
+
         using (SqliteConnection connection = new SqliteConnection(cadenaConexion))
         {
-            string query = "SELECT * FROM PresupuestosDetalle WHERE idPresupuesto = @idPresupuesto";
             connection.Open();
-            using (var command = new SqliteCommand(query, connection))
+            using (SqliteCommand command = new SqliteCommand(query, connection))
             {
-                command.Parameters.Add(new SqliteParameter("@idPresupuesto", idPresupuesto));
+                command.Parameters.Add(new SqliteParameter("@idquery", id));
+
                 using (SqliteDataReader reader = command.ExecuteReader())
                 {
                     while (reader.Read())
                     {
-                        var detalle = new PresupuestoDetalle
-                        {
-                            Producto = ObtenerProductoPorId(Convert.ToInt32(reader["idProducto"])),
-                            Cantidad = Convert.ToInt32(reader["cantidad"])
-                        };
-                        detalles.Add(detalle);
+                        PresupuestoDetalle Pd = new PresupuestoDetalle();
+                        Productos nuevoProducto = new Productos();
+
+                        nuevoProducto.IdProducto = Convert.ToInt32(reader["idProducto"]);
+                        nuevoProducto.Descripcion = Convert.ToString(reader["Descripcion"]);
+                        nuevoProducto.Precio = Convert.ToInt32(reader["Precio"]);
+                        Pd.Cantidad = Convert.ToInt32(reader["Cantidad"]);
+
+                        Pd.Producto = nuevoProducto;
+
+                        lista.Add(Pd);
                     }
                 }
             }
         }
-        return detalles;
+        return lista;
     }
 
     // Método auxiliar para obtener un producto por ID

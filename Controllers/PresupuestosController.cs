@@ -26,8 +26,8 @@ public class PresupuestosController : Controller
     [HttpGet]
     public IActionResult ListarDetalles(int id)
     {
-        var presupuestos = _presupuestosRepository.ObtenerPresupuestoPorId(id);
-        return View(presupuestos); 
+        var listaDetalle = _presupuestosRepository.ObtenerDetalle(id);
+        return View(listaDetalle);
     }
 
     [HttpGet] // formulario de creacion
