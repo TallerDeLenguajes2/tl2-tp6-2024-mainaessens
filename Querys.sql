@@ -52,3 +52,25 @@ FROM
 DELETE FROM PresupuestosDetalle
 WHERE idPresupuesto = [idPresupuesto] AND idProducto = [idProducto];
 
+-- creo tabla clientes
+CREATE TABLE Clientes (
+    ClienteId INT PRIMARY KEY IDENTITY(1,1),
+    Nombre NVARCHAR(100) NOT NULL,
+    Email NVARCHAR(100) NOT NULL,
+    Telefono NVARCHAR(15) NOT NULL
+);
+
+-- relaciono tabla presupuesto con tabla cliente
+ALTER TABLE Presupuestos
+ADD ClienteId INT;
+
+-- Establecer la clave foránea
+ALTER TABLE Presupuestos
+ADD CONSTRAINT FK_Presupuestos_Clientes FOREIGN KEY (ClienteId) REFERENCES Clientes(ClienteId);
+
+-- Eliminar la columna NombreDestinatario
+ALTER TABLE Presupuestos
+DROP COLUMN NombreDestinatario;
+
+
+
