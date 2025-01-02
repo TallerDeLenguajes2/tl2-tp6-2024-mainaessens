@@ -1,6 +1,6 @@
 using Microsoft.Data.Sqlite; 
 public class ProductoRepository{
-    private string cadenaConexion = @"Data Source=C:\Users\naess\Documents\1. FACET\3° año\Segundo cuatrimestre\Taller de lenguaje II\tl2-tp5-2024-mainaessens\tienda.db";
+    private string cadenaConexion = @"Data Source=C:\Users\naess\Documents\1. FACET\3° año\Segundo cuatrimestre\Taller de lenguaje II\tl2-tp6-2024-mainaessens\tienda.db";
     public void CrearNuevo(Productos prod)
     {
             using ( SqliteConnection connection = new SqliteConnection(cadenaConexion))
