@@ -9,21 +9,17 @@ public class PresupuestosController : Controller
     private readonly ILogger<PresupuestosController> _logger;
 
     private readonly PresupuestosRepository _presupuestosRepository;
-    private readonly ClientesRepository _clienteRepository; 
-    private readonly ProductoRepository _productoRepository; 
 
     public PresupuestosController(ILogger<PresupuestosController> logger)
     {
         _logger = logger;
         _presupuestosRepository = new PresupuestosRepository();
-        _clienteRepository = new ClientesRepository(); 
-        _productoRepository = new ProductoRepository(); 
     }
 
     [HttpGet]
     public IActionResult ListarPresupuestos()
     {
-        var presupuestos = _presupuestosRepository.ListasPresupuestos();
+        var presupuestos = _presupuestosRepository.ListarPresupuestos();
         return View(presupuestos); 
     }
 
@@ -37,65 +33,60 @@ public class PresupuestosController : Controller
     [HttpGet] // formulario de creacion
     public IActionResult CrearPresupuesto()
     {
-        var viewModel = new PresupuestoViewModel{
-            productos = _productoRepository.ListarProductos(); 
-            clientes = _clienteRepository.ObtenerClientes();
-
-        }; 
-        return View(viewModel);
+        return View();
     }
 
-    [HttpPost] // guardado del cliente
+    [HttpPost] // guardado del presupuesto
     [ValidateAntiForgeryToken]
-    public IActionResult CrearCliente(Cliente cliente){
-        if (ModelState.IsValid)
+    public IActionResult CrearPresupuesto(Presupuestos presupuesto){
+        if (ModelState.IsValid) // se utiliza para verificar si los datos enviados en un formulario cumplen con todas las reglas de validación definidas en el modelo de datos.
         {
-            _clienteRepository.CrearCliente(cliente); 
+            _presupuestosRepository.CrearNuevo(presupuesto);
             return RedirectToAction(nameof(Index));
         }
-        return View(cliente); 
+        return View(presupuesto); 
     }
 
     [HttpGet] //formulario de edicion
-    public IActionResult ModificarCliente(int id){
-        var cliente = _clienteRepository.ObtenerCliente(id);
-        if (cliente == null)
+    public IActionResult ModificarPresupuesto(int id){
+        var presupuesto = _presupuestosRepository.ObtenerPresupuestoPorId(id);
+        if (presupuesto == null)
         {
             return NotFound(); 
         }
-        return View(cliente); 
+        return View(presupuesto); 
     }
 
     [HttpPost] //guardo los cambios
-    public IActionResult ModificarCliente(int id, Cliente cliente){
+    public IActionResult ModificarPresupuesto(Presupuestos presupuesto){
         if (ModelState.IsValid)
         {
-            _clienteRepository.ModificarCliente(id, cliente); 
+            _presupuestosRepository.ModificarPresupuestoQ(presupuesto);
             return RedirectToAction(nameof(Index)); 
         }
-        return View(cliente); 
+        return View(presupuesto); 
     }
 
     [HttpGet] //confirmacion de eliminacion
-    public IActionResult EliminarCliente(int id){
-        var cliente = _clienteRepository.ObtenerCliente(id); 
-        if (cliente == null)
+    public IActionResult EliminarPresupuesto(int id){
+        var presupuesto = _presupuestosRepository.ObtenerPresupuestoPorId(id); 
+        if (presupuesto == null)
         {
             return NotFound(); 
         }
-        return View(cliente); // retorna vista de confirmacion con los datos del cliente
+        return View(presupuesto); // retorna vista de confirmacion con los datos del cliente
     }
 
     [HttpPost] //eliminacion confirmada
     [ValidateAntiForgeryToken] //Es una buena práctica proteger las acciones POST con tokens antifalsificación para prevenir ataques Cross-Site Request Forgery (CSRF).
     public IActionResult EliminarClienteConfirmado(int id){
         //En este caso no es necesario el ModelState.IsValid porque solo recibo un dato simple(id)
-        _clienteRepository.EliminarCliente(id);
+        _presupuestosRepository.EliminarPresupuesto(id); 
         return RedirectToAction(nameof(Index));
     }
 
     public IActionResult Index(){ // Muestra la lista de clientes como la página principal del controlador.
-        return View(_clienteRepository.ObtenerClientes()); 
+        return View(_presupuestosRepository.ListarPresupuestos()); 
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

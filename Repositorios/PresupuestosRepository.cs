@@ -23,7 +23,7 @@ public class PresupuestosRepository
     }
 
     // Método para listar todos los presupuestos registrados
-    public List<Presupuestos> ListasPresupuestos()
+    public List<Presupuestos> ListarPresupuestos()
     {
         List<Presupuestos> listaPres = new List<Presupuestos>();
         using (SqliteConnection connection = new SqliteConnection(cadenaConexion))
@@ -172,4 +172,51 @@ public class PresupuestosRepository
         }
         return producto;
     }
+
+    public void ModificarPresupuestoQ(Presupuestos presupuesto)
+    {
+        using (var connection = new SqliteConnection(cadenaConexion))
+        {
+            connection.Open();
+            using (var transaction = connection.BeginTransaction()) //Preguntar como funciona esto
+            {
+
+                // Actualiza el presupuesto en la tabla Presupuestos
+                string query = @"UPDATE Presupuestos 
+                                 SET NombreDestinatario = @destinatario, FechaCreacion = @fecha
+                                 WHERE idPresupuesto = @id";
+
+                using (var command = new SqliteCommand(query, connection, transaction))
+                {
+                    command.Parameters.AddWithValue("@destinatario", presupuesto.NombreDestinatario);
+                    command.Parameters.AddWithValue("@fecha", presupuesto.FechaCreacion);
+                    command.Parameters.AddWithValue("@id", presupuesto.IdPresupuesto);
+                    command.ExecuteNonQuery();
+                }
+
+                // Actualiza la tabla PresupuestosDetalle
+                if (presupuesto.Detalle != null)
+                {
+                    foreach (var detalle in presupuesto.Detalle)
+                    {
+
+                        string updateDetalleQuery = @"UPDATE PresupuestosDetalle 
+                                                       SET Cantidad = @cant
+                                                       WHERE idPresupuesto = @idPr AND idProducto = @idP";
+
+                        using (var command = new SqliteCommand(updateDetalleQuery, connection, transaction))
+                        {
+                            command.Parameters.AddWithValue("@cant", detalle.Cantidad);
+                            command.Parameters.AddWithValue("@idP", detalle.Producto.IdProducto);
+                            command.Parameters.AddWithValue("@idPr", presupuesto.IdPresupuesto);
+                            command.ExecuteNonQuery();
+                        }
+                    }
+                }
+                // Si todo sale bien, se confirma la transacción
+                transaction.Commit();
+            }
+        }
+    }
+
 }
