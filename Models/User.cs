@@ -1,0 +1,31 @@
+using System.Security.Principal; 
+
+public class User {
+    int id; 
+    string username; 
+    string nombre; 
+    string password; 
+    private AccessLevel accessLevel; 
+
+    public User(){
+    
+    }
+
+    public User(CrearUsuarioViewModel usuarioViewModel){
+        username = usuarioViewModel.Username; 
+        nombre = usuarioViewModel.Nombre; 
+        password = usuarioViewModel.Password; 
+        accessLevel = usuarioViewModel.AccessLevel; 
+    }
+
+    public int Id { get => id; set => id = value; }
+    public string Username { get => username; set => username = value; }
+    public string Nombre { get => nombre; set => nombre = value; }
+    public string Password { get => password; set => password = value; }
+    public AccessLevel AccessLevel { get => accessLevel; set => accessLevel = value; }
+}
+
+public enum AccessLevel{
+    Admin,
+    Cliente
+}
