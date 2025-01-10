@@ -8,78 +8,203 @@ public class ClientesController : Controller
 {
     private readonly ILogger<ClientesController> _logger;
 
-    private  IClientesRepository _clienteRepository; 
+    private IClientesRepository _clienteRepository;
 
     public ClientesController(ILogger<ClientesController> logger, IClientesRepository _clienteRepos)
     {
         _logger = logger;
-        _clienteRepository = _clienteRepos; 
+        _clienteRepository = _clienteRepos;
+    }
+
+    public IActionResult Index()
+    {
+    try
+    {
+        if (string.IsNullOrEmpty(HttpContext.Session.GetString("User"))) 
+            return RedirectToAction("Index", "Login");
+
+        ViewData["EsAdmin"] = HttpContext.Session.GetString("AccessLevel") == "Admin";
+        return View(_clienteRepository.ObtenerClientes());
+    }
+    catch (Exception ex)
+    {
+        _logger.LogError(ex.ToString());
+        ViewBag.ErrorMessage = "No se pudo cargar la lista de clientes";
+        return RedirectToAction("Index");
+    }
     }
 
     [HttpGet]
     public IActionResult ListarClientes()
     {
-        var clientes = _clienteRepository.ObtenerClientes;
-        return View(clientes); 
+        try
+        {
+            var clientes = _clienteRepository.ObtenerClientes;
+            return View(clientes);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex.ToString());
+            ViewBag.ErrorMessage = "No se pudo obtener la lista de clientes.";
+            return RedirectToAction("Error");
+        }
     }
 
     [HttpGet] // formulario de creacion
     public IActionResult CrearCliente()
     {
+        try
+        {
+           if (string.IsNullOrEmpty(HttpContext.Session.GetString("User"))) 
+            return RedirectToAction("Index", "Login");
+
+        if (HttpContext.Session.GetString("AccessLevel") != "Admin")
+        {
+            TempData["ErrorMessage"] = "No tienes permisos para realizar esta acción.";
+            return RedirectToAction("Index");
+        }
+
         return View();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex.ToString());
+            ViewBag.ErrorMessage = "No se pudo cargar el formulario de creación de cliente.";
+            return RedirectToAction("Index");
+        }
     }
 
     [HttpPost] // guardado del cliente
     [ValidateAntiForgeryToken]
-    public IActionResult CrearCliente(Cliente cliente){
-        if (ModelState.IsValid)
+    public IActionResult CrearCliente(AltaClienteViewModel clienteVM)
+    {
+        try
         {
-            _clienteRepository.CrearCliente(cliente); 
-            return RedirectToAction(nameof(Index));
+           if (string.IsNullOrEmpty(HttpContext.Session.GetString("User"))) 
+            return RedirectToAction("Index", "Login");
+
+            if (HttpContext.Session.GetString("AccessLevel") != "Admin")
+            {
+                TempData["ErrorMessage"] = "No tienes permisos para realizar esta acción.";
+                return RedirectToAction("Index");
+            }
+
+            if (!ModelState.IsValid) 
+                return RedirectToAction("Index");
+
+            var clien = new Cliente(clienteVM);
+            _clienteRepository.CrearCliente(clien);
+            return RedirectToAction("Index");
         }
-        return View(cliente); 
+        catch (Exception ex)
+        {
+            _logger.LogError(ex.ToString());
+            ViewBag.ErrorMessage = "No se pudo crear el cliente.";
+            return RedirectToAction("Error");
+        }
     }
 
-    [HttpGet] //formulario de edicion
-    public IActionResult ModificarCliente(int id){
+    [HttpGet] // formulario de edicion
+    public IActionResult ModificarCliente(int id)
+    {
+        try
+        {
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("User"))) 
+            return RedirectToAction("Index", "Login");
+
+        if (HttpContext.Session.GetString("AccessLevel") != "Admin")
+        {
+            TempData["ErrorMessage"] = "No tienes permisos para realizar esta acción.";
+            return RedirectToAction("Index");
+        }
+
         var cliente = _clienteRepository.ObtenerCliente(id);
-        if (cliente == null)
-        {
-            return NotFound(); 
+        var clienteVM = new ModificarClienteViewModel(cliente);
+        return View(clienteVM);
         }
-        return View(cliente); 
-    }
-
-    [HttpPost] //guardo los cambios
-    public IActionResult ModificarCliente(int id, Cliente cliente){
-        if (ModelState.IsValid)
+        catch (Exception ex)
         {
-            _clienteRepository.ModificarCliente(id, cliente); 
-            return RedirectToAction(nameof(Index)); 
+            _logger.LogError(ex.ToString());
+            ViewBag.ErrorMessage = "No se pudo cargar el formulario de edición de cliente.";
+            return RedirectToAction("Error");
         }
-        return View(cliente); 
     }
 
-    [HttpGet] //confirmacion de eliminacion
-    public IActionResult EliminarCliente(int id){
-        var cliente = _clienteRepository.ObtenerCliente(id); 
-        if (cliente == null)
+    [HttpPost] // guardo los cambios
+    public IActionResult ModificarCliente(int id, Cliente cliente)
+    {
+        try
         {
-            return NotFound(); 
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("User"))) 
+            return RedirectToAction("Index", "Login");
+            if (HttpContext.Session.GetString("AccessLevel") != "Admin")
+        {
+            TempData["ErrorMessage"] = "No tienes permisos para realizar esta acción.";
+            return RedirectToAction("Index");
         }
-        return View(cliente); // retorna vista de confirmacion con los datos del cliente
+
+        if (!ModelState.IsValid) 
+            return RedirectToAction("Index");
+
+        _clienteRepository.ModificarCliente(id, cliente);
+        return RedirectToAction("Index");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex.ToString());
+            ViewBag.ErrorMessage = "No se pudo modificar el cliente.";
+            return RedirectToAction("Error");
+        }
     }
 
-    [HttpPost] //eliminacion confirmada
-    [ValidateAntiForgeryToken] //Es una buena práctica proteger las acciones POST con tokens antifalsificación para prevenir ataques Cross-Site Request Forgery (CSRF).
-    public IActionResult EliminarClienteConfirmado(int id){
-        //En este caso no es necesario el ModelState.IsValid porque solo recibo un dato simple(id)
-        _clienteRepository.EliminarCliente(id);
-        return RedirectToAction(nameof(Index));
+    [HttpGet] // confirmacion de eliminacion
+    public IActionResult EliminarCliente(int id)
+    {
+        try
+        {
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("User"))) 
+            return RedirectToAction("Index", "Login");
+
+            if (HttpContext.Session.GetString("AccessLevel") != "Admin")
+            {
+                TempData["ErrorMessage"] = "No tienes permisos para realizar esta acción.";
+                return RedirectToAction("Index");
+            }
+
+            return View(_clienteRepository.ObtenerCliente(id));
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex.ToString());
+            ViewBag.ErrorMessage = "No se pudo cargar el cliente para eliminar.";
+            return RedirectToAction("Error");
+        }
     }
 
-    public IActionResult Index(){ // Muestra la lista de clientes como la página principal del controlador.
-        return View(_clienteRepository.ObtenerClientes()); 
+    [HttpPost] // eliminacion confirmada
+    [ValidateAntiForgeryToken] // Es una buena práctica proteger las acciones POST con tokens antifalsificación para prevenir ataques Cross-Site Request Forgery (CSRF).
+    public IActionResult EliminarClienteConfirmado(int id)
+    {
+        try
+        {
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("User"))) 
+            return RedirectToAction("Index", "Login");
+
+            if (HttpContext.Session.GetString("AccessLevel") != "Admin")
+            {
+                TempData["ErrorMessage"] = "No tienes permisos para realizar esta acción.";
+                return RedirectToAction("Index");
+            }
+
+            _clienteRepository.EliminarCliente(id);
+            return RedirectToAction("Index");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex.ToString());
+            ViewBag.ErrorMessage = "No se pudo eliminar el cliente.";
+            return RedirectToAction("Error");
+        }
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
