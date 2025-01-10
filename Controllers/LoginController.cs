@@ -106,19 +106,42 @@ public class LoginController : Controller
     [HttpPost]
 
     public IActionResult AltaUsuario(CrearUsuarioViewModel usuarioVM)
+{
+    try
     {
-        try
-        {            
-            if(!ModelState.IsValid) return RedirectToAction ("CrearUsuario");
-            User usuario = new User(usuarioVM);
-            _userRepository.AltaUsuario(usuario);
-            return RedirectToAction("Index");
-        }
-        catch (Exception ex)
+        // Validar el modelo
+        if (!ModelState.IsValid)
         {
-            _logger.LogError(ex.ToString());
-            ViewBag.ErrorMessage = "No se puso autenticar el usuario";
-            return View("Index");
+            // Registrar los errores de validación para ayudar en la depuración
+            foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
+            {
+                _logger.LogError("Error de validación: " + error.ErrorMessage);
+            }
+
+            // Regresar con el modelo para que se muestren los errores en la vista
+            return View("CrearUsuario", usuarioVM);
         }
+
+        // Convertir CrearUsuarioViewModel a User (asegúrate de que el constructor de User esté bien definido)
+        User usuario = new User(usuarioVM);
+
+        // Intentar guardar el usuario en el repositorio
+        _userRepository.AltaUsuario(usuario);
+
+        // Redirigir a la página de login o a alguna otra vista luego de crear el usuario
+        return RedirectToAction("Index");
     }
+    catch (Exception ex)
+    {
+        // Loguear el error con detalles adicionales para la depuración
+        _logger.LogError("Error al crear usuario: " + ex.ToString());
+
+        // Mostrar un mensaje de error en la vista
+        ViewBag.ErrorMessage = "Hubo un error al intentar crear el usuario.";
+
+        // Regresar a la vista de creación con el modelo para que el usuario vea los datos ingresados
+        return View("CrearUsuario", usuarioVM);
+    }
+}
+
 }

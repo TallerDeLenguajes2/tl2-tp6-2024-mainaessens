@@ -30,18 +30,44 @@ public class UserRepository : IUserRepository{
         }
     }
 
-    public void AltaUsuario(User usuario){
-        string query = @"INSERT INTO Usuario (nombre, usuario, password, id_rol) VALUES (@nombre, @usu, @contra, @rol)"; 
-        using(SqliteConnection connection = new SqliteConnection(cadenaConexion)){
-            connection.Open(); 
-            SqliteCommand command = new SqliteCommand(query, connection);
-            command.Parameters.AddWithValue("@nombre", usuario.Nombre); 
-            command.Parameters.AddWithValue("@usu", usuario.Username); 
-            command.Parameters.AddWithValue("@contra", usuario.Password); 
-            command.Parameters.AddWithValue("@rol", (int)usuario.AccessLevel); 
-            command.ExecuteNonQuery(); 
-            connection.Close(); 
+    public void AltaUsuario(User usuario)
+{
+    // Cadena de la consulta SQL
+    string query = @"INSERT INTO Usuario (nombre, usuario, password, id_rol) VALUES (@nombre, @usu, @contra, @rol)";
 
+    // Usar un bloque 'using' para asegurar el cierre correcto de la conexión
+    using (SqliteConnection connection = new SqliteConnection(cadenaConexion))
+    {
+        try
+        {
+            // Abrir la conexión
+            connection.Open();
+
+            // Crear el comando SQL con los parámetros necesarios
+            using (SqliteCommand command = new SqliteCommand(query, connection))
+            {
+                // Añadir los parámetros de forma segura con los tipos correctos
+                command.Parameters.Add("@nombre", SqliteType.Text).Value = usuario.Nombre;
+                command.Parameters.Add("@usu", SqliteType.Text).Value = usuario.Username;
+                command.Parameters.Add("@contra", SqliteType.Text).Value = usuario.Password;
+                command.Parameters.Add("@rol", SqliteType.Integer).Value = (int)usuario.AccessLevel;
+
+                // Ejecutar la consulta
+                command.ExecuteNonQuery();
+            }
+        }
+        catch (Exception ex)
+        {
+            // Registrar o manejar el error en caso de una excepción
+            // _logger.LogError("Error al insertar usuario: " + ex.Message);
+            Console.WriteLine($"Error al insertar usuario: {ex.Message}");
+        }
+        finally
+        {
+            // Cerrar la conexión (aunque el bloque 'using' ya se encarga de ello)
+            connection.Close();
         }
     }
+}
+
 }

@@ -131,7 +131,7 @@ public class ClientesController : Controller
     }
 
     [HttpPost] // guardo los cambios
-    public IActionResult ModificarCliente(int id, Cliente cliente)
+    public IActionResult ModificarCliente(Cliente cliente)
     {
         try
         {
@@ -146,7 +146,7 @@ public class ClientesController : Controller
         if (!ModelState.IsValid) 
             return RedirectToAction("Index");
 
-        _clienteRepository.ModificarCliente(id, cliente);
+        _clienteRepository.ModificarCliente(cliente);
         return RedirectToAction("Index");
         }
         catch (Exception ex)
