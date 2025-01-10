@@ -8,12 +8,12 @@ public class ClientesController : Controller
 {
     private readonly ILogger<ClientesController> _logger;
 
-    private readonly ClientesRepository _clienteRepository; 
+    private  IClientesRepository _clienteRepository; 
 
-    public ClientesController(ILogger<ClientesController> logger)
+    public ClientesController(ILogger<ClientesController> logger, IClientesRepository _clienteRepos)
     {
         _logger = logger;
-        _clienteRepository = new ClientesRepository(); 
+        _clienteRepository = _clienteRepos; 
     }
 
     [HttpGet]
