@@ -7,16 +7,16 @@ namespace tl2_tp6_2024_mainaessens.Controllers;
 public class PresupuestosController : Controller
 {
     private readonly ILogger<PresupuestosController> _logger;
-    private readonly PresupuestosRepository _presupuestosRepository;
-    private readonly ClientesRepository _clientesRepository;
-    private readonly ProductoRepository _productosRepository;
+    private  IPresupuestoRepository _presupuestosRepository;
+    private  IClientesRepository _clientesRepository;
+    private  IProductoRepository _productosRepository;
 
-    public PresupuestosController(ILogger<PresupuestosController> logger)
+    public PresupuestosController(ILogger<PresupuestosController> logger, IPresupuestoRepository _presupuestosRepo, IClientesRepository _clientesRepo, IProductoRepository _productosRepo)
     {
         _logger = logger;
-        _presupuestosRepository = new PresupuestosRepository();
-        _clientesRepository = new ClientesRepository();
-        _productosRepository = new ProductoRepository();
+        _presupuestosRepository = _presupuestosRepo;
+        _clientesRepository = _clientesRepo;
+        _productosRepository = _productosRepo;
     }
 
     [HttpGet]

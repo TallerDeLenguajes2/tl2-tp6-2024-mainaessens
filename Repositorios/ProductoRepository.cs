@@ -1,6 +1,11 @@
 using Microsoft.Data.Sqlite; 
-public class ProductoRepository{
-    private string cadenaConexion = @"Data Source=C:\Users\naess\Documents\1. FACET\3° año\Segundo cuatrimestre\Taller de lenguaje II\tl2-tp6-2024-mainaessens\tienda.db";
+public class ProductoRepository : IProductoRepository{
+    private readonly ILogger<ClientesRepository> _logger; 
+    private readonly string cadenaConexion;
+    
+    public ProductoRepository(string cadenaDeConexion){
+        cadenaConexion = cadenaDeConexion; 
+    }
     public void CrearNuevo(Productos prod)
     {
             using ( SqliteConnection connection = new SqliteConnection(cadenaConexion))

@@ -1,9 +1,14 @@
 using Microsoft.Data.Sqlite;
 
 
-public class ClientesRepository
+public class ClientesRepository : IClientesRepository
 {
-    private string connectionString = @"Data Source = Tienda.db;Cache=Shared";
+    private readonly ILogger<ClientesRepository> _logger; 
+    private readonly string connectionString;
+    
+    public ClientesRepository(string cadenaDeConexion){
+        connectionString = cadenaDeConexion; 
+    }
 
     public void CrearCliente(Cliente cliente)
     {
@@ -49,7 +54,7 @@ public class ClientesRepository
         return clientes;
     }
 
-    public void ModificarCliente(int id, Cliente cliente)
+    public void ModificarCliente(Cliente cliente)
     {
         string query = @"UPDATE Clientes SET Nombre = @nombre, Email = @email, Telefono = @telefono WHERE idCliente = @Id";
 
@@ -60,7 +65,7 @@ public class ClientesRepository
             command.Parameters.AddWithValue("@nombre", cliente.Nombre);
             command.Parameters.AddWithValue("@email", cliente.Email);
             command.Parameters.AddWithValue("@telefono", cliente.Telefono);
-            command.Parameters.AddWithValue("@Id", id);
+            command.Parameters.AddWithValue("@Id", cliente.Id);
             command.ExecuteNonQuery();
             connection.Close();
         }
